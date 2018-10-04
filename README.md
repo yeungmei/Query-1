@@ -1,4 +1,3 @@
-# Query-1
 # Debt Collection
 # New Debit Collection Placement Query
 
