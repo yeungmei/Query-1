@@ -1,6 +1,6 @@
 # Query-1
 # Debt Collection
-# CABLE New Biz Query
+# New Debit Collection Placement Query
 
 # - Heading -
 SELECT branch, ra0134.account, confirmdate AS discodate, curbal, (progbal::numeric), 
