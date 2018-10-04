@@ -1,5 +1,7 @@
-﻿-- CABLE New Biz Query --
+-- Debt Collection --
+-- New Debit Collection Placement Query --
 
+-- Heading --
 SELECT branch, ra0134.account, confirmdate AS discodate, curbal, (progbal::numeric), 
 CASE WHEN (((equipchrg::numeric)) + ((equipcredit::numeric))) > 0::numeric AND equipcount > '0' THEN ( (equipchrg::numeric) + (equipcredit::numeric) ) 
 	ELSE 0::numeric END AS Equip_balance,
@@ -44,7 +46,7 @@ CASE WHEN ( entrydate - confirmdate ) > 30 AND ( entrydate + 30 > now()::date ) 
 CASE WHEN disco_reason LIKE any(array[ '%137 %']) THEN trim('NONPAY') ELSE trim('VOL') END AS disco,
 CASE WHEN ( lastname LIKE any(array[ '%TEST%']) OR firstname LIKE any(array[ '%TEST%'])) THEN trim('REMOVE') END AS remove,
 CASE WHEN ( maname LIKE any(array[ '%NATIONAL CLIENT %'])) THEN trim('HOUSE ACCT') END AS houseremove
---CASE WHEN ( entrydate - confirmdate ) < 31 THEN NULL ELSE ( entrydate + 30 ) END AS backdate_audit,
+# - REMOVE - CASE WHEN ( entrydate - confirmdate ) < 31 THEN NULL ELSE ( entrydate + 30 ) END AS backdate_audit,
 
 FROM bi.ra0134
 
@@ -54,15 +56,17 @@ LEFT JOIN cbs.at ON ( ra0134.at = at.at )
 
 WHERE branch <> 'STA'  --exclude Shaw Direct
 AND confirmdate < now()::date - '39 day'::interval 
---AND status = 'Off' - ONLY USE WHEN R38 is not updated
+AND status = 'Off' - ONLY USE WHEN R38 is not updated
 AND curbal::numeric > 20
--- AND branch <> 'ABC' -- 2016-05-09 remove until further notice, resume collection on Sept 1st
+AND branch <> 'ABC' 
+# 2016-05-09 remove until further notice, resume collection on Sept 1st
 ORDER BY count_backdate ASC, biz ASC
-;  --END of FILE
+;
+-- END of FILE --
 
 
 
-
+-- Notes -- 
 -- Create by Helen Yeung 2014-09-24
 -- Input Bi File and output combine with R38 and AT
 -- change bi account format first 
